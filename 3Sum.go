@@ -166,84 +166,165 @@ Repeat reverse
 
 */
 
+// This solution "works", but triplets are duplicated if numbers are repeated
+
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// func twoSum(array []int, target int) []int {
+// 	m := make(map[int]int)
+
+// 	for i, v := range array {
+// 		if _, ok := m[target-v]; ok {
+// 			return []int{m[target-v], i}
+// 		} else {
+// 			m[v] = i
+// 		}
+// 	}
+// 	return nil
+// }
+
+// func filter(ss []int, test func(int) bool) (ret []int) {
+// 	for _, s := range ss {
+// 		if test(s) {
+// 			ret = append(ret, s)
+// 		}
+// 	}
+// 	return
+// }
+
+// func isNegative(num int) bool {
+// 	return num <= 0
+// }
+
+// func isPositive(num int) bool {
+// 	return num > 0
+// }
+
+// func isZero(num int) bool {
+// 	return num == 0
+// }
+
+// func contatins(array [][]int, slice []int ) bool {
+//     for i, v := range array {
+//         if
+//     }
+// }
+
+// func threeSum(nums []int) (trips [][]int) {
+// 	negatives := filter(nums, isNegative)
+// 	positives := filter(nums, isPositive)
+// 	zeroes := filter(nums, isZero)
+
+// 	if len(zeroes) >= 3 {
+// 		for i := 0; i < len(zeroes)-1; i++ {
+// 			trips = append(trips, []int{0, 0, 0})
+// 		}
+// 	}
+
+// 	for i := 0; i < len(negatives); i++ {
+// 		target := -negatives[i]
+
+// 		if twoSum(positives, target) != nil {
+// 			indices := twoSum(positives, target)
+
+// 			trips = append(trips, []int{positives[indices[0]], positives[indices[1]], negatives[i]})
+// 		}
+// 	}
+
+// 	for i := 0; i < len(positives); i++ {
+// 		target := -positives[i]
+
+// 		if twoSum(negatives, target) != nil {
+// 			indices := twoSum(negatives, target)
+
+// 			trips = append(trips, []int{negatives[indices[0]], negatives[indices[1]], positives[i]})
+// 		}
+// 	}
+
+// 	return
+// }
+
+// func main() {
+// 	fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
+// 	fmt.Println(threeSum([]int{-8, -6, -3, -3, -1, 0, 1, 1, 2, 5, 6}))
+// }
+
+//Still has duplicates, can't quite figure out how to fix
+
+// package main
+
+// import (
+// 	"fmt"
+// 	"sort"
+// )
+
+// func threeSum(nums []int) (trips [][]int) {
+// 	sort.Ints(nums)
+// 	seen := make(map[int]bool)
+// 	for i := 0; i < len(nums); i++ {
+// 		if i != 0 && nums[i] == nums[i-1] {
+// 			continue
+// 		}
+// 		for j := i + 1; j < len(nums); j++ {
+// 			fmt.Println(j)
+// 			if _, ok := seen[-nums[i]-nums[j]]; ok {
+// 				trips = append(trips, []int{nums[i], nums[j], -nums[i] - nums[j]})
+// 				for j+1 < len(nums) && nums[j+1] == nums[j] {
+// 					fmt.Println(j, "hi")
+// 					j++
+// 				}
+// 			}
+// 			seen[nums[j]] = true
+// 		}
+// 	}
+
+// 	return
+// }
+
+// func main() {
+// 	fmt.Println(threeSum([]int{-1, 0, 1, 2, -1, -4}))
+// 	// 	fmt.Println(threeSum([]int{-8, -6, -3, -3, -1, 0, 1, 1, 2, 5, 6}))
+// }
+
 package main
 
 import (
 	"fmt"
+	"sort"
 )
 
-func twoSum(array []int, target int) []int {
-	m := make(map[int]int)
-
-	for i, v := range array {
-		if _, ok := m[target-v]; ok {
-			return []int{m[target-v], i}
-		} else {
-			m[v] = i
-		}
-	}
-	return nil
-}
-
-func filter(ss []int, test func(int) bool) (ret []int) {
-	for _, s := range ss {
-		if test(s) {
-			ret = append(ret, s)
-		}
-	}
-	return
-}
-
-func isNegative(num int) bool {
-	return num <= 0
-}
-
-func isPositive(num int) bool {
-	return num > 0
-}
-
-func isZero(num int) bool {
-	return num == 0
-}
-
-func contatins(array [][]int, slice []int ) bool {
-    for i, v := range array {
-        if 
-    }
-}
-
 func threeSum(nums []int) (trips [][]int) {
-	negatives := filter(nums, isNegative)
-	positives := filter(nums, isPositive)
-	zeroes := filter(nums, isZero)
+	sort.Ints(nums)
+	for i := 0; i < len(nums); i++ {
+		if i != 0 && nums[i] == nums[i-1] {
+			continue
+		}
 
-	if len(zeroes) >= 3 {
-		for i := 0; i < len(zeroes)-1; i++ {
-			trips = append(trips, []int{0, 0, 0})
+		j, k := i+1, len(nums)-1
+		for j < k {
+			if nums[i]+nums[j]+nums[k] == 0 {
+				trips = append(trips, []int{nums[i], nums[j], nums[k]})
+				j++
+				for j < k {
+					if nums[j] == nums[j-1] {
+						j++
+					} else {
+						break
+					}
+				}
+			} else if nums[i]+nums[j]+nums[k] < 0 {
+				j++
+			} else {
+				k--
+			}
 		}
 	}
 
-	for i := 0; i < len(negatives); i++ {
-		target := -negatives[i]
-
-		if twoSum(positives, target) != nil {
-			indices := twoSum(positives, target)
-
-			trips = append(trips, []int{positives[indices[0]], positives[indices[1]], negatives[i]})
-		}
-	}
-
-	for i := 0; i < len(positives); i++ {
-		target := -positives[i]
-
-		if twoSum(negatives, target) != nil {
-			indices := twoSum(negatives, target)
-
-			trips = append(trips, []int{negatives[indices[0]], negatives[indices[1]], positives[i]})
-		}
-	}
-
-	return removeDuplicates(trips)
+	return
 }
 
 func main() {
