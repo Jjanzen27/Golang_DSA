@@ -17,29 +17,28 @@ type ListNode struct {
 	Next *ListNode
 }
 
-func mergeTwoLists(l1 *ListNode, l2 *ListNode) {
-	dummyNode := &ListNode{Val: -1, Next: nil}
-	currentNode := dummyNode
+func mergeTwoLists(l1 *ListNode, l2 *ListNode) *ListNode {
+	newList := &ListNode{}
+	dummyNode := newList
 
-	for l1.Next != nil && l2.Next != nil {
-		if l1.val > l2.val {
-			currentNode.Next = l1
+	for l1 != nil && l2 != nil {
+		if l1.Val < l2.Val {
+			newList.Next = l1
 			l1 = l1.Next
 		} else {
-			currentNode.Next = l2
+			newList.Next = l2
 			l2 = l2.Next
 		}
-		currentNode = currentNode.Next
+		newList = newList.Next
 	}
 
-	if l1.Next != nil {
-		currentNode.next = l1
-	}
-	if l2.Next != nil {
-		currentNode.next = l2
+	if l1 != nil {
+		newList.Next = l1
+	} else if l2 != nil {
+		newList.Next = l2
 	}
 
-	return dummyHead.Next
+	return dummyNode.Next
 }
 
 func main() {
