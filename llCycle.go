@@ -39,10 +39,86 @@
  
 // Follow up: Can you solve it using O(1) (i.e. constant) memory?
 
+/*
+
+Problem: Check if there's a cycle in a linked list.
+
+Explanation: There's a cycle in a list if there is some node in 
+the list that can be reached again by continuously following 
+the next pointer.
+
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+
+Mental model: Follow the next pointer until we either reach a node 
+we've visited before or nil.
+
+    --> If we hit 'nil', there isn't a cycle: return false
+
+Question: How can we tell if we've already visited a node?
+
+Option 1: Use a hash map to keep track of the nodes we've visited
+as we iterate through the list. If we find a node that's already
+in the hash map, return true.
+
+Option 2: Use fast and slow pointers. The slow pointer moves one
+node at a time. The fast pointer moves two nodes at a time. 
+
+If the fast pointer reaches nil, there are no cycles in our list.
+
+If the fast pointer catches up to the slow pointer, we found a cycle!
+
+fast pointer = f
+slow pointer = s
+
+ s
+ f
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+        
+        
+        s
+               f
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+
+
+               s
+                             f
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+
+                      s
+               f
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+        
+                             s
+                             f
+[1] -> [2] -> [3] -> [4] -> [5]
+        ^                    |  
+        |                    |
+        |____________________|
+        
+The pointers are pointing at the same node, so we have a loop!
+
+*/
+
+
 func hasCycle(head *ListNode) bool {
-    //slow and fast pointer
     slow := head
     fast := head
+    
     for fast != nil && fast.Next != nil {
         slow = slow.Next
         fast = fast.Next.Next
@@ -50,5 +126,6 @@ func hasCycle(head *ListNode) bool {
             return true
         }
     }
+    
     return false
 }
