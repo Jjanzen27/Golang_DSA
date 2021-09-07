@@ -35,7 +35,7 @@ First attempt: doesn't use dp, works in some cases (starts at top and chooses le
 value until bottom). Doesn't work if the minimum sum is on a path with a higher value
 at any point.
 
- */
+*/
 
 // package main
 
@@ -65,32 +65,52 @@ at any point.
 // 	return triangleHelper(triangle, sum, index, level+1)
 // }
 
+// base case: when we get to bottom of triangle
+
+//    2
+//   3 4
+//  6 5 7
+// 4 1 8 3
+
+// on the first level, there's only one option
+// on the second level, there are two options: i == 0 or 1 [0][0] or [0][1]
+// on the third level, we can go [0][0][0], [0][0][1], [0][1][1] or [0][1][2]
+// on the fourth level [0][0][0][0], [0][0][0][1], [0][0][1][1], [0][0][1][2],
+//                     [0][1][1][1], [0][1][1][2], [0][1][2][2], [0][1][2][3]
+
+// map:
+// [0] :2
+// [0, 0] : 5           add together the result of map[0] and triangle[1][0]
+// [0, 1] : 6           add together the result of map[0] and triangle[1][1]
+// [0, 0, 0] : 11       add together map[0, 0] and triangle[2][0]
+// }
+package main
+
+import "fmt"
+
 func minimumTotal(triangle [][]int) int {
-	paths := make(map[[]int]int)
-	return triangleHelper(triangle, paths)
+	dp := make(map[[2]int]int)
+
+	for row := len(triangle) - 1; row >= 0; row-- {
+		for col := len(triangle[row]) - 1; col >= 0; col-- {
+			if row == len(triangle)-1 {
+				dp[[2]int{row, col}] = triangle[row][col]
+			} else {
+				// min(sum of their value + square below and sum of value of square below and right)
+				dp[[2]int{row, col}] = min(dp[[2]int{row + 1, col}], dp[[2]int{row + 1, col + 1}]) + triangle[row][col]
+			}
+		}
+
+	}
+	return dp[[2]int{0, 0}]
 }
 
-func triangleHelper(triangle, paths) {
-    // base case: when we get to bottom of triangle
-    
-    //    2
-    //   3 4
-    //  6 5 7
-    // 4 1 8 3
-    
-    // on the first level, there's only one option
-    // on the second level, there are two options: i == 0 or 1 [0][0] or [0][1]
-    // on the third level, we can go [0][0][0], [0][0][1], [0][1][1] or [0][1][2]
-    // on the fourth level [0][0][0][0], [0][0][0][1], [0][0][1][1], [0][0][1][2],
-    //                     [0][1][1][1], [0][1][1][2], [0][1][2][2], [0][1][2][3]
-    
-    // map:
-    // [0] :2
-    // [0, 0] : 5           add together the result of map[0] and triangle[1][0]
-    // [0, 1] : 6           add together the result of map[0] and triangle[1][1]
-    // [0, 0, 0] : 11       add together map[0, 0] and triangle[2][0]
+func min(a, b int) int {
+	if a < b {
+		return a
+	}
+	return b
 }
-
 
 func main() {
 	fmt.Println(minimumTotal([][]int{{1}, {2, 4}, {6, 5, 7}, {4, 1, 8, 3}}))
