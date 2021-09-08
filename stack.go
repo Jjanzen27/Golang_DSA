@@ -12,6 +12,23 @@ type Node struct {
 	Next  *Node
 }
 
+func (s *Stack) push(n *Node) {
+	n.Next = s.Top
+	s.Top = n
+	s.Size++
+}
+
+func (s *Stack) pop() *Node {
+	n := s.Top
+	s.Top = s.Top.Next
+	s.Size--
+	return n
+}
+
+func (s *Stack) peek() *Node {
+	return s.Top
+}
+
 func main() {
 	stack := &Stack{}
 	node1 := &Node{Value: "horse"}
@@ -28,20 +45,4 @@ func main() {
 	stack.pop()
 	fmt.Println(stack.peek())
 	return
-}
-
-func (s *Stack) push(n *Node) {
-	n.Next = s.Top
-	s.Top = n
-	return
-}
-
-func (s *Stack) pop() *Node {
-	n := s.Top
-	s.Top = s.Top.Next
-	return n
-}
-
-func (s *Stack) peek() *Node {
-	return s.Top
 }
