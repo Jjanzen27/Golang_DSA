@@ -40,6 +40,7 @@ import (
 func main() {
 
 }
+
 func invertTree(root *TreeNode) *TreeNode {
 	if root == nil {
 		return root

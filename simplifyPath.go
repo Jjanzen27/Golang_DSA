@@ -50,12 +50,66 @@ package main
 
 import (
 	"fmt"
+	"strings"
 )
 
+type Stack struct {
+	Top  *Node
+	Size int
+}
+
+type Node struct {
+	Value string // All types satisfy the empty interface, so we can store anything here.
+	Next  *Node
+}
+
+func (s *Stack) push(n *Node) {
+	n.Next = s.Top
+	s.Top = n
+	s.Size++
+}
+
+func (s *Stack) pop() *Node {
+	n := s.Top
+	s.Top = s.Top.Next
+	s.Size--
+	return n
+}
+
+func (s *Stack) peek() *Node {
+	return s.Top
+}
+
 func simplifyPath(path string) string {
+	parts := strings.Split(path, "/")
+	stack := &Stack{}
+
+	for _, v := range parts {
+		if v == "." || v == "" {
+			continue
+		} else if v == ".." {
+			if stack.Size != 0 {
+				stack.pop()
+			} else {
+				continue
+			}
+		} else {
+			stack.push(&Node{Value: v})
+		}
+	}
+
+	newPath := make([]string, stack.Size)
+
+	for i := stack.Size - 1; stack.Size != 0; {
+		val := stack.pop().Value
+		newPath[i] = val
+		i--
+	}
+
+	return "/" + strings.Join(newPath, "/")
 
 }
 
 func main() {
-
+	fmt.Println(simplifyPath("/a/./b//../../c/"))
 }
