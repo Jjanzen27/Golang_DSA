@@ -35,15 +35,15 @@ func isSymmetric(root *TreeNode) bool {
 		return true
 	}
 
+	return isSameTree(root.Left, root.Right)
 }
 
-func invertTree(root *TreeNode) *TreeNode {
-	if root == nil {
-		return root
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+	if p == nil || q == nil {
+		return p == q
 	}
 
-	root.Left, root.Right = invertTree(root.Right), invertTree(root.Left)
-	return root
+	return isSameTree(p.Left, q.Right) && isSameTree(p.Right, q.Left) && p.Val == q.Val
 }
 
 func main() {

@@ -59,7 +59,7 @@ type Stack struct {
 }
 
 type Node struct {
-	Value string // All types satisfy the empty interface, so we can store anything here.
+	Value string
 	Next  *Node
 }
 
