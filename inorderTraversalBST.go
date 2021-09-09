@@ -64,3 +64,10 @@ func inorderTraversal(root *TreeNode) (nodes []int) {
 func main() {
 
 }
+
+// stack := []int{}
+// return helper(root, &stack)
+
+// func helper() {
+
+// }
