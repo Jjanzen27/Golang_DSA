@@ -57,6 +57,29 @@ func pop(slice *[]*TreeNode) *TreeNode {
     *slice = (*slice)[:len(*slice)-1]
     return node
 }
+
+// Another solution
+
+func preorderTraversal(root *TreeNode) []int {
+	result := []int{}
+
+	return helper(root, result)
+
+}
+
+func helper(node *TreeNode, res []int) []int {
+	if node != nil {
+		res = append(res, node.Val)
+		if node.Left != nil {
+			res = helper(node.Left, res)
+		}
+		if node.Right != nil {
+			res = helper(node.Right, res)
+		}
+	}
+	return res
+}
+
 */
 
 package main
@@ -79,6 +102,19 @@ func preorderTraversal(root *TreeNode) (result []int) {
 	}
 
 	return
+}
+
+func flatten(root *TreeNode) {
+	nodes := preorderTraversal(root)
+	for i := 0; i < nodes.len; i++ {
+		if i != nodes.len-1 {
+			nodes[i].Left = nil
+			nodes[i].Right = nodes[i+1]
+		} else {
+			nodes[i].Left = nil
+			nodes[i].Right = nil
+		}
+	}
 }
 
 func main() {
